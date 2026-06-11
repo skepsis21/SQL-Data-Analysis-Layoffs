@@ -1,4 +1,4 @@
-# Layoffs-SQL-Data-Analysis
+# SQL-Data-Analysis-Layoffs
 Exploratory Data Analysis (EDA) on global layoff data using MySQL
 
 # Exploratory Data Analysis (SQL)
