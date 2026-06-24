@@ -36,4 +36,11 @@ The SQL script (`layoffs_eda.sql`) is engineered into five distinct phases:
 * Is the macroeconomic damage spread evenly across thousands of smaller tech startups, or is it heavily skewed by massive mega-cap corporations? (Calculated dynamically via the Pareto calculation query).
 
 ---
+
+## SQL Exploratory Data Analysis
+I performed deep-dive analysis into layoff trends using SQL window functions and CTEs to identify high-impact economic events.
+
+![SQL Pareto Analysis](docs/MySQL_Layoffs.png)
+
+
 *Template curated for portfolio development and architectural data exploration.*
