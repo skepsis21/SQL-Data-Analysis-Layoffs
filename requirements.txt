@@ -3,3 +3,7 @@ numpy
 matplotlib
 seaborn
 jupyter
+# Add these for database connectivity and environment management
+sqlite3
+sqlalchemy
+python-dotenv
