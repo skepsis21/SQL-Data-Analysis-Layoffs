@@ -4,3 +4,5 @@ __pycache__/
 *.db
 *.log
 *.tmp
+# Ignore the raw data file
+Data/layoffs.csv

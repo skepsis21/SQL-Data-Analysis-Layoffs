@@ -142,3 +142,32 @@ FROM Pareto_Calculation
 -- Tip: Change this threshold (e.g., <= 80.00) to see exactly which companies make up the top 80% of damage
 WHERE cumulative_percentage_share <= 50.00
 ORDER BY total_volume DESC;
+
+
+-- 10. Identify the critical few entities driving the majority of global impact
+WITH Entity_Contributions AS (
+    SELECT 
+        company,
+        SUM(total_laid_off) AS total_volume
+    FROM layoffs_staging
+    WHERE total_laid_off IS NOT NULL
+    GROUP BY company
+),
+Running_Impact AS (
+    SELECT 
+        company,
+        total_volume,
+        SUM(total_volume) OVER(ORDER BY total_volume DESC) AS cumulative_volume,
+        SUM(total_volume) OVER() AS grand_total_volume
+    FROM Entity_Contributions
+)
+SELECT 
+    company,
+    total_volume,
+    -- Added CAST to FLOAT to ensure precise percentage calculation
+    ROUND((CAST(cumulative_volume AS FLOAT) / grand_total_volume) * 100, 2) AS cumulative_percentage_share,
+    ROW_NUMBER() OVER(ORDER BY total_volume DESC) AS company_rank
+FROM Running_Impact
+-- Pareto threshold: Companies contributing to the first 50% of total layoffs
+WHERE (CAST(cumulative_volume AS FLOAT) / grand_total_volume) <= 0.50
+ORDER BY total_volume DESC;
