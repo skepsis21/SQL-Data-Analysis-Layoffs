@@ -6,27 +6,29 @@ def setup_database(csv_path, db_name):
     """
     Ingests raw CSV data into a SQLite database.
     """
-    # 1. Ensure the data directory exists (good practice)
     if not os.path.exists(csv_path):
         print(f"Error: The file {csv_path} was not found.")
         return
 
-    # 2. Load the data
     print("Loading data from CSV...")
     df = pd.read_csv(csv_path)
 
-    # 3. Create/Connect to the SQLite database
+    # Connect to the SQLite database
     conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
-
+    
     # 4. Write data to the table
-    # 'replace' ensures that every time you run this, you get a fresh database
-    table_name = "layoffs"
+    # Using 'layoffs_staging' to match your SQL analysis scripts
+    table_name = "layoffs_staging"
     df.to_sql(table_name, conn, if_exists='replace', index=False)
     
-    print(f"Successfully loaded {len(df)} rows into the '{table_name}' table in {db_name}.")
+    print(f"Successfully loaded {len(df)} rows into the '{table_name}' table.")
 
-    # 5. Close connection
+    # 5. Verify and Close
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+    count = cursor.fetchone()[0]
+    print(f"Verification: Found {count} rows in the database.")
+    
     conn.close()
 
 if __name__ == "__main__":
